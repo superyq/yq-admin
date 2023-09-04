@@ -20,28 +20,16 @@ export const useUserStore = defineStore({
     // 登录接口
     async login(data) {
       return new Promise((resolve, reject) => {
-        // 前端测试登录，下面代码为静态登录，调试登录请自己删除。
-        // if (data.username == "admin" && data.password == "admin123") {
-        //   let token = "123456";
-        //   setToken(token);
-        //   this.token = token;
-        //   resolve(true);
-        // } else {
-        //   reject(false);
-        // }
-
-        // 调用后端接口，联调接口后自己取消注释
         login(data)
           .then((res) => {
             if (res.code !== 200) {
               reject(res);
             }
-
-            const { data } = res;
+            console.log(res);
             // 保存token
-            setToken(data.access_token);
-            this.token = data.access_token;
-            resolve(data);
+            setToken(res.token);
+            this.token = res.token;
+            resolve(res);
           })
           .catch((err) => {
             reject(err);
@@ -86,7 +74,7 @@ export const useUserStore = defineStore({
         //     if (data.code !== 200) {
         //       reject(data);
         //     }
-            
+
         //     this.roles = data.roles;
         //     this.user = data;
         //     resolve(data);

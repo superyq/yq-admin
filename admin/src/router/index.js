@@ -5,9 +5,9 @@ import baseRouters from "./baseRouter.js";
 import { getToken } from "@/utils/cookie.js";
 import { useUserStore } from "@/store/user.js";
 import { usePermissionStore } from "@/store/permission.js";
- 
-const whiteList = ["/", "/login"];
- 
+
+const whiteList = ["/", "/login", "/register"];
+
 const routes = [...baseRouters];
 const _createRouter = () =>
   createRouter({
@@ -21,20 +21,20 @@ const _createRouter = () =>
       };
     },
   });
- 
+
 export function resetRouter() {
   const newRouter = _createRouter();
   router.matcher = newRouter.matcher;
 }
- 
+
 const router = _createRouter();
- 
+
 // 路由监听
 router.beforeEach((to, from, next) => {
   NProgress.start();
   let userStore = useUserStore();
   let permissionStore = usePermissionStore();
- 
+
   // 判断是否登录
   if (!!getToken()) {
     // 已登录，跳转登录页，转跳首页
@@ -55,7 +55,7 @@ router.beforeEach((to, from, next) => {
                 children: _res,
               };
               router.addRoute(resetRouters);
- 
+
               // 这句代码，重要！重要！重要！
               // 来确保addRoute()时动态添加的路由已经被完全加载上去。没有这句，动态路由加载后无效
               next({ ...to, replace: true });
@@ -83,5 +83,5 @@ router.beforeEach((to, from, next) => {
     NProgress.done();
   }
 });
- 
+
 export default router;

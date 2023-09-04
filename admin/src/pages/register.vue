@@ -1,40 +1,17 @@
 <script setup>
-import cookie from "js-cookie";
 import { ref, reactive } from "vue";
-import { NButton, NInput, NForm, NFormItem, NCheckbox } from "naive-ui";
+import { NButton, NInput, NForm, NFormItem } from "naive-ui";
 import router from "@/router/index.js";
-import { useUserStore } from "@/store/user.js";
-import { encrypt, decrypt } from "@/utils/jsencrypt";
-import { getCodeImg } from "@/api/login.js";
+import { register } from "@/api/user.js";
 
 import CopeRight from "@/components/CopyRight.vue";
-
-// 用户状态管理
-let userStore = useUserStore();
-
-// 是否需要验证码
-let needCode = ref(false);
-let codeUrl = ref("");
-// 获取图形验证码
-function getCode() {
-  getCodeImg().then((res) => {
-    needCode.value =
-      res.captchaEnabled === undefined ? true : res.captchaEnabled;
-    if (needCode.value) {
-      codeUrl.value = "data:image/gif;base64," + res.img;
-      form.uuid = res.uuid;
-    }
-  });
-}
-// needCode.value && getCode(); // 需要获取验证码，自己取消注释
 
 // 登录
 let formRef = ref(null);
 let form = reactive({
-  username: "yqcoder",
-  password: "888888",
-  code: "",
-  uuid: "",
+  username: "",
+  password: "",
+  confirmPassword: "",
 });
 let rules = {
   username: {
@@ -47,36 +24,36 @@ let rules = {
     trigger: ["input", "blur"],
     message: "请输入密码",
   },
-  code: {
-    required: true,
-    trigger: ["input", "blur"],
-    message: "请输入验证码",
-  },
+  confirmPassword: [
+    {
+      required: true,
+      trigger: ["input", "blur"],
+      message: "请再次输入密码",
+    },
+    {
+      validator: validatePasswordSame,
+      trigger: ["blur", "password-input"],
+      message: "两次密码输入不一致",
+    },
+  ],
 };
-let rememberMe = ref(false);
 let loginBtnState = ref(false);
-let handleLogin = () => {
+function validatePasswordSame(rule, value) {
+  return value === form.password;
+}
+let handleRegister = () => {
   loginBtnState.value = true;
   formRef.value?.validate((errors) => {
     if (!errors) {
-      if (rememberMe.value) {
-        cookie.set("username", form.username, { expires: 30 });
-        cookie.set("password", encrypt(form.password), { expires: 30 });
-        cookie.set("rememberMe", rememberMe.value, { expires: 30 });
-      } else {
-        cookie.remove("username");
-        cookie.remove("password");
-        cookie.remove("rememberMe");
-      }
-
-      userStore
-        .login(form)
-        .then(() => {
-          window.$msg.success("登录成功");
+      register(form)
+        .then((data) => {
+          if (data.code !== 200) {
+            return (loginBtnState.value = false);
+          }
+          window.$msg.success("注册成功");
           router.push("/home");
         })
         .catch(() => {
-          needCode.value && getCode();
           loginBtnState.value = false;
         });
     } else {
@@ -85,16 +62,8 @@ let handleLogin = () => {
   });
 };
 
-// 获取默认登录账号
-function getCookie() {
-  form.username = cookie.get("username") || "";
-  form.password = decrypt(cookie.get("password")) || "";
-  rememberMe.value = Boolean(cookie.get("rememberMe")) || false;
-}
-// getCookie(); // 需要记住密码，自己取消注释
-
-function handleRegister() {
-  router.push("/register");
+function goBack() {
+  router.push("/login");
 }
 </script>
 
@@ -102,7 +71,7 @@ function handleRegister() {
   <div class="login-bg c-center">
     <div class="login__box">
       <div class="login-logo__box">
-        <div class="login__title login-logo">登 录</div>
+        <div class="login__title login-logo">注 册</div>
       </div>
       <n-form
         ref="formRef"
@@ -115,7 +84,7 @@ function handleRegister() {
           <n-input
             class="login-input"
             v-model:value="form.username"
-            placeholder="请输入用户名/手机号"
+            placeholder="请输入账号"
           >
             <template #prefix>
               <svg-icon name="username" color="grey"></svg-icon>
@@ -129,43 +98,35 @@ function handleRegister() {
             placeholder="请输入密码"
             type="password"
             show-password-on="mousedown"
-            @keyup.enter="handleLogin"
           >
             <template #prefix>
               <svg-icon name="password" color="grey"></svg-icon>
             </template>
           </n-input>
         </n-form-item>
-        <n-form-item v-if="needCode" class="login-code" path="code">
+        <n-form-item path="confirmPassword">
           <n-input
-            v-model:value="form.code"
-            class="login-input login-input_code"
-            placeholder="验证码"
-            @keyup.enter="handleLogin"
+            class="login-input"
+            v-model:value="form.confirmPassword"
+            placeholder="请再次输入密码"
+            type="password"
+            show-password-on="mousedown"
           >
             <template #prefix>
-              <svg-icon name="code" color="grey"></svg-icon>
+              <svg-icon name="password" color="grey"></svg-icon>
             </template>
           </n-input>
-          <img class="login-code-img" :src="codeUrl" @click="getCode" />
         </n-form-item>
-        <div class="login-checkbox_box">
-          <n-checkbox
-            class="login-checkbox"
-            v-model:checked="rememberMe"
-          ></n-checkbox>
-          <span>记住密码</span>
-        </div>
         <n-button
           class="login-btn_login"
           type="info"
-          @click="handleLogin"
+          @click="handleRegister"
           :loading="loginBtnState"
           :disabled="loginBtnState"
-          >登录</n-button
+          >注册</n-button
         >
       </n-form>
-      <div class="login-btn_forget" @click="handleRegister">点击注册</div>
+      <div class="login-btn_forget" @click="goBack">返回登录</div>
     </div>
     <cope-right></cope-right>
   </div>
@@ -262,19 +223,6 @@ function handleRegister() {
 
 .login-input {
   margin-top: 20px;
-}
-
-.login-checkbox_box {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin: -16px 0 10px;
-  color: #71a1c5;
-  font-size: 12px;
-}
-
-.login-checkbox {
-  margin-right: 5px;
 }
 
 .login-btn_forget {
