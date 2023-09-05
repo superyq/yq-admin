@@ -3,10 +3,9 @@ const UserModel = require("../models/UserModel");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 const { formidable } = require("formidable");
-const path = require("path")
+const path = require("path");
 
 const router = express.Router();
-// console.log(formidable);
 
 // 用户注册
 router.post("/register", async (req, res, next) => {
@@ -84,7 +83,22 @@ router.post("/userinfo", async (req, res, next) => {
 });
 
 // 修改头像
-router.post("/avatar", async (req, res, next) => {
+router.post("/avatar", (req, res, next) => {
+  console.log(1, req);
+  const form = formidable({
+    multiples: true,
+    uploadDir: path.resolve(__dirname, "../public/images"),
+    keepExtensions: true,
+  });
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    console.log(fields, files.files[0].newFilename);
+  });
+  return;
   let token = req.get("Authorization").split(" ")[1];
 
   jwt.verify(token, "yqcoder", async (err, data) => {
@@ -106,18 +120,18 @@ router.post("/avatar", async (req, res, next) => {
     const form = formidable({
       multiples: true,
       uploadDir: path.resolve(__dirname, "/../public/images"),
+      keepExtensions: true,
     });
-    console.log(1, form);
+
     form.parse(req, (err, fields, files) => {
-      console.log(2, fields);
       if (err) {
         next(err);
         return;
       }
-      res.json({ fields, files });
+      console.log(fields, files);
     });
-    const result = await UserModel.updateOne(req.body);
-    console.log(3, result)
+    // const result = await UserModel.updateOne(req.body);
+    // console.log(3, result);
     // res.json({
     //   code: 200,
     //   msg: "success",
