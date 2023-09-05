@@ -14,10 +14,9 @@ router.post("/login", async (req, res) => {
       msg: "用户不存在，请先注册！",
     });
   } else {
-    console.log(data);
     let token = jwt.sign(
       {
-        uid: 123,
+        username: data[0].username,
       },
       "yqcoder",
       {

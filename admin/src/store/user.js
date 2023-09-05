@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { login, logout, getInfo } from "@/api/login.js";
+import { login, logout } from "@/api/login.js";
+import { getInfo } from "@/api/user.js";
 import { getToken, setToken, removeToken } from "@/utils/cookie.js";
 
 export const useUserStore = defineStore({
@@ -23,9 +24,8 @@ export const useUserStore = defineStore({
         login(data)
           .then((res) => {
             if (res.code !== 200) {
-              reject(res);
+              return reject(res);
             }
-            console.log(res);
             // 保存token
             setToken(res.token);
             this.token = res.token;
@@ -65,23 +65,24 @@ export const useUserStore = defineStore({
     async getInfo() {
       return new Promise((resolve, reject) => {
         // 前端测试，下面代码为静态获取用户信息，调试登录请自己删除。
-        this.roles = ["admin"];
-        resolve();
+        // this.roles = ["admin"];
+        // resolve();
 
         // 调用后端接口，联调接口后自己取消注释
-        // getInfo()
-        //   .then((data) => {
-        //     if (data.code !== 200) {
-        //       reject(data);
-        //     }
-
-        //     this.roles = data.roles;
-        //     this.user = data;
-        //     resolve(data);
-        //   })
-        //   .catch((err) => {
-        //     reject(err);
-        //   });
+        getInfo()
+          .then((res) => {
+            if (res.code !== 200) {
+              return reject(res);
+            }
+            let { data } = res;
+            console.log(data);
+            this.roles = ["admin", ...data.roles];
+            this.user = data;
+            resolve(data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
     },
   },

@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
  
-const TokenKey = "User-Token";
+const TokenKey = "token";
 const ExpiresInKey = "User-Expires-In";
  
 export function getToken() {

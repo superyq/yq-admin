@@ -7,3 +7,11 @@ export function register(data) {
     data,
   });
 }
+
+// 获取用户详细信息
+export function getInfo() {
+  return api({
+    url: `/users/getInfo`,
+    method: "get"
+  });
+}

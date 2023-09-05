@@ -20,14 +20,6 @@ export function logout() {
   });
 }
  
-// 获取用户详细信息
-export function getInfo() {
-  return api({
-    url: `/system/user/getInfo`,
-    method: "get",
-  });
-}
- 
 // 获取验证码
 export function getCodeImg() {
   return api({
