@@ -6,8 +6,9 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
-  let { username, password } = req.body;
-  const data = await UserModel.find({ username, password: md5(password) });
+  let { userName, password } = req.body;
+  console.log(req.body);
+  const data = await UserModel.find({ userName, password: md5(password) });
   if (data.length == 0) {
     res.json({
       code: 500,
@@ -16,7 +17,7 @@ router.post("/login", async (req, res) => {
   } else {
     let token = jwt.sign(
       {
-        username: data[0].username,
+        userName: data[0].userName,
       },
       "yqcoder",
       {

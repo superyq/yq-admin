@@ -31,13 +31,13 @@ function getCode() {
 // 登录
 let formRef = ref(null);
 let form = reactive({
-  username: "yqcoder",
+  userName: "yqcoder",
   password: "888888",
   code: "",
   uuid: "",
 });
 let rules = {
-  username: {
+  userName: {
     required: true,
     trigger: ["input", "blur"],
     message: "请输入用户名",
@@ -60,11 +60,11 @@ let handleLogin = () => {
   formRef.value?.validate((errors) => {
     if (!errors) {
       if (rememberMe.value) {
-        cookie.set("username", form.username, { expires: 30 });
+        cookie.set("userName", form.userName, { expires: 30 });
         cookie.set("password", encrypt(form.password), { expires: 30 });
         cookie.set("rememberMe", rememberMe.value, { expires: 30 });
       } else {
-        cookie.remove("username");
+        cookie.remove("userName");
         cookie.remove("password");
         cookie.remove("rememberMe");
       }
@@ -87,7 +87,7 @@ let handleLogin = () => {
 
 // 获取默认登录账号
 function getCookie() {
-  form.username = cookie.get("username") || "";
+  form.userName = cookie.get("userName") || "";
   form.password = decrypt(cookie.get("password")) || "";
   rememberMe.value = Boolean(cookie.get("rememberMe")) || false;
 }
@@ -111,10 +111,10 @@ function handleRegister() {
         :rules="rules"
         label-placement="left"
       >
-        <n-form-item path="username">
+        <n-form-item path="userName">
           <n-input
             class="login-input"
-            v-model:value="form.username"
+            v-model:value="form.userName"
             placeholder="请输入用户名/手机号"
           >
             <template #prefix>

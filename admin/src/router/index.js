@@ -46,7 +46,6 @@ router.beforeEach((to, from, next) => {
           .getInfo()
           .then((res) => {
             // 获取动态路由
-            console.log(res);
             permissionStore.getRouters().then((_res) => {
               let resetRouters = {
                 path: "/layout",
@@ -55,15 +54,13 @@ router.beforeEach((to, from, next) => {
                 children: _res,
               };
               router.addRoute(resetRouters);
-              console.log({...to})
 
               // 这句代码，重要！重要！重要！
               // 来确保addRoute()时动态添加的路由已经被完全加载上去。没有这句，动态路由加载后无效
               next({ ...to, replace: true });
             });
           })
-          .catch((err) => {
-            window.$msg.error(err);
+          .catch(() => {
             userStore.logout().then(() => {
               next({ name: "login" });
             });

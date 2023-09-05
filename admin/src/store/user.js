@@ -75,7 +75,6 @@ export const useUserStore = defineStore({
               return reject(res);
             }
             let { data } = res;
-            console.log(data);
             this.roles = ["admin", ...data.roles];
             this.user = data;
             resolve(data);

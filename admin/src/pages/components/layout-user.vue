@@ -18,7 +18,7 @@ let avatar = computed(() => {
     return "";
   }
 });
-let userName = computed(() => {
+let username = computed(() => {
   if (!!userStore.user?.userName) {
     return userStore.user.userName;
   } else {
@@ -165,7 +165,7 @@ let handleSelect = (key, item) => {
         <svg-icon v-else name="avatar" width="35" height="35"></svg-icon>
       </div>
       <div class="header-right_user-name">
-        <span>{{ userName }}</span>
+        <span>{{ username }}</span>
         <svg-icon name="down" width="10"></svg-icon>
       </div>
     </div>
@@ -183,8 +183,8 @@ let handleSelect = (key, item) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   border-radius: 10px;
   overflow: hidden;
 
@@ -195,6 +195,7 @@ let handleSelect = (key, item) => {
   }
 }
 .header-right_user-name {
+  font-size: 14px;
   span {
     margin: 0 5px;
   }

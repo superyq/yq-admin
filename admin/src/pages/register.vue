@@ -9,12 +9,12 @@ import CopeRight from "@/components/CopyRight.vue";
 // 登录
 let formRef = ref(null);
 let form = reactive({
-  username: "",
+  userName: "",
   password: "",
   confirmPassword: "",
 });
 let rules = {
-  username: {
+  userName: {
     required: true,
     trigger: ["input", "blur"],
     message: "请输入用户名",
@@ -80,10 +80,10 @@ function goBack() {
         :rules="rules"
         label-placement="left"
       >
-        <n-form-item path="username">
+        <n-form-item path="userName">
           <n-input
             class="login-input"
-            v-model:value="form.username"
+            v-model:value="form.userName"
             placeholder="请输入账号"
           >
             <template #prefix>
