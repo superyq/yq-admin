@@ -8,7 +8,7 @@
   <body>
     <form action="/users/avatar" method="post" enctype="multipart/form-data">
       <input name="name" type="text" />
-      <input id="file" name="files" type="file"/>
+      <input id="file" name="files" type="file" />
       <button>提交</button>
     </form>
   </body>
@@ -17,7 +17,7 @@
     const upload = document.getElementById("file");
     upload.onchange = function (value) {
       const fileList = value.target.files;
-      console.log(fileList)
+      console.log(fileList);
     };
   </script>
 </html>
