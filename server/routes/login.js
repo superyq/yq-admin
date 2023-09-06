@@ -12,7 +12,7 @@ router.post("/login", async (req, res) => {
   if (data.length == 0) {
     res.json({
       code: 500,
-      msg: "用户不存在，请先注册！",
+      msg: "账号或密码错误！",
     });
   } else {
     let token = jwt.sign(

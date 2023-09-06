@@ -44,9 +44,9 @@ router.get("/userinfo", async (req, res, next) => {
 router.post("/userinfo", async (req, res, next) => {
   let token = req.get("Authorization").split(" ")[1];
   try {
-    await tokenToUser(token);
+    let { data } = await tokenToUser(token);
 
-    await UserModel.updateOne(req.body);
+    await UserModel.updateOne({ userName: data.userName }, req.body);
     res.json({
       code: 200,
       msg: "success",
@@ -86,6 +86,33 @@ router.post("/avatar", async (req, res, next) => {
         msg: "success",
         imgUrl: url,
       });
+    });
+  } catch (err) {
+    res.json(err);
+  }
+});
+
+// 修改密码
+router.post("/updatePassword", async (req, res, next) => {
+  let token = req.get("Authorization").split(" ")[1];
+
+  try {
+    let { data } = await tokenToUser(token);
+    let oldPassword = md5(req.body.oldPassword);
+    let newPassword = md5(req.body.newPassword);
+    if (oldPassword !== data.password) {
+      return res.json({
+        code: 500,
+        msg: "旧密码错误",
+      });
+    }
+    await UserModel.updateOne(
+      { userName: data.userName },
+      { ...req.body, password: newPassword }
+    );
+    res.json({
+      code: 200,
+      msg: "success",
     });
   } catch (err) {
     res.json(err);

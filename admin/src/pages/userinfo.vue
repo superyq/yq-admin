@@ -28,9 +28,9 @@ let handleEdit = () => {
 };
 let handleSubmit = (type) => {
   if (type) {
-    if (!validatPhone.value) {
-      return window.$msg.error("请正确输入手机号");
-    }
+    // if (!validatPhone.value) {
+    //   return window.$msg.error("请正确输入手机号");
+    // }
     loading.value = true;
     delete editUser._id;
     updateUserinfo(editUser).then((data) => {
@@ -67,12 +67,12 @@ let handleSubmit = (type) => {
           <div class="edit__info">
             <template v-if="!isEdit">
               <div class="user-box_content-item">
-                <div class="item-label">真实姓名：</div>
-                <div class="item-value">{{ user.realName }}</div>
-              </div>
-              <div class="user-box_content-item">
                 <div class="item-label">用户名：</div>
                 <div class="item-value">{{ user.userName }}</div>
+              </div>
+              <div class="user-box_content-item">
+                <div class="item-label">真实姓名：</div>
+                <div class="item-value">{{ user.realName }}</div>
               </div>
               <div class="user-box_content-item">
                 <div class="item-label">手机号码：</div>
@@ -90,16 +90,16 @@ let handleSubmit = (type) => {
             </template>
             <template v-else>
               <div class="user-box_content-item">
+                <div class="item-label">用户名：</div>
+                <div class="item-value">{{ editUser.userName }}</div>
+              </div>
+              <div class="user-box_content-item">
                 <div class="item-label">用户姓名：</div>
                 <n-input
                   class="info-input--width item-value"
                   size="small"
                   v-model:value="editUser.realName"
                 ></n-input>
-              </div>
-              <div class="user-box_content-item">
-                <div class="item-label">用户名：</div>
-                <div class="item-value">{{ editUser.userName }}</div>
               </div>
               <div class="user-box_content-item">
                 <div class="item-label">手机号码：</div>

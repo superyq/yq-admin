@@ -172,7 +172,7 @@ function handleRegister() {
 </template>
 
 <style lang="scss">
-.n-form-item {
+.login__box .n-form-item {
   margin-top: -20px;
 }
 </style>

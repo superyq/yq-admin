@@ -4,10 +4,8 @@ import { updateAvatar } from "@/api/user.js";
 
 let emits = defineEmits(["getUrl"]);
 let cutDown = (data) => {
-  // return console.log(data);
   let formData = new FormData();
-  let { blob, file } = data;
-  console.log(file);
+  let { file } = data;
   formData.append("file", file);
   updateAvatar(formData).then((res) => {
     emits("getUrl", res);
@@ -17,6 +15,7 @@ let cutDown = (data) => {
 
 <template>
   <img-cutter
+    class="img-cutter"
     ref="imgCutterModal"
     label="修改头像"
     file-type="jpeg"
@@ -50,4 +49,12 @@ let cutDown = (data) => {
   </img-cutter>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.img-cutter {
+  .btn {
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+  }
+}
+</style>

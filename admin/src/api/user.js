@@ -1,5 +1,6 @@
 import api from "./http";
 
+// 用户注册
 export function register(data) {
   return api({
     url: "/users/register",
@@ -16,9 +17,9 @@ export function getInfo() {
   return api({
     url: `/users/userinfo`,
     headers: {
-      isToken: false
+      isToken: false,
     },
-    method: "get"
+    method: "get",
   });
 }
 
@@ -26,19 +27,28 @@ export function getInfo() {
 export function updateUserinfo(data) {
   return api({
     url: "/users/userinfo",
-    method: 'post',
-    data
-  })
+    method: "post",
+    data,
+  });
 }
 
 // 更换用户头像
 export function updateAvatar(data) {
   return api({
-    url: '/users/avatar',
-    method: 'post',
+    url: "/users/avatar",
+    method: "post",
     headers: {
-      "Content-Type": "multipart/form-data"
+      "Content-Type": "multipart/form-data",
     },
-    data
-  })
+    data,
+  });
+}
+
+// 修改密码
+export function updateUserPwd(data) {
+  return api({
+    url: "/users/updatePassword",
+    method: "post",
+    data,
+  });
 }
