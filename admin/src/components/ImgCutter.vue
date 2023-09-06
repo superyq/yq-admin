@@ -4,10 +4,11 @@ import { updateAvatar } from "@/api/user.js";
 
 let emits = defineEmits(["getUrl"]);
 let cutDown = (data) => {
+  // return console.log(data);
   let formData = new FormData();
-  let { blob } = data;
-  console.log(data);
-  formData.append("avatarfile", blob);
+  let { blob, file } = data;
+  console.log(file);
+  formData.append("file", file);
   updateAvatar(formData).then((res) => {
     emits("getUrl", res);
   });

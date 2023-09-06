@@ -4,6 +4,9 @@ export function register(data) {
   return api({
     url: "/users/register",
     method: "post",
+    headers: {
+      isToken: false,
+    },
     data,
   });
 }
@@ -12,6 +15,9 @@ export function register(data) {
 export function getInfo() {
   return api({
     url: `/users/userinfo`,
+    headers: {
+      isToken: false
+    },
     method: "get"
   });
 }
@@ -30,6 +36,9 @@ export function updateAvatar(data) {
   return api({
     url: '/users/avatar',
     method: 'post',
+    headers: {
+      "Content-Type": "multipart/form-data"
+    },
     data
   })
 }

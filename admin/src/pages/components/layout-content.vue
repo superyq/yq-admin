@@ -14,8 +14,7 @@
 .layout-content {
   padding: 20px;
   margin: 20px;
-  // height: auto;
-  height: calc(100vh - 170px);
+  min-height: calc(100vh - 170px);
   border: 1px solid #e9e9e9;
   border-radius: 5px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.047) 0 0 5px;
