@@ -6,6 +6,7 @@ let emits = defineEmits(["getUrl"]);
 let cutDown = (data) => {
   let formData = new FormData();
   let { file } = data;
+  console.log(data);
   formData.append("file", file);
   updateAvatar(formData).then((res) => {
     emits("getUrl", res);
