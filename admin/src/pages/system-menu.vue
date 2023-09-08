@@ -1,11 +1,13 @@
 <script setup>
 import { reactive, ref } from "vue";
-import { NInput, NSelect } from "naive-ui";
-import YInput from "@/components/naive-ui/y-input.vue"
+import { NButton } from "naive-ui";
+// import YInput from "@/components/naive-ui/y-input.vue";
+// import YSelect from "@/components/naive-ui/y-select.vue";
+// import YButton from "@/components/naive-ui/y-button.vue";
 
 let searchForm = reactive({
-  menuName: "",
-  menuStatue: null,
+  menuName: "啦啦啦",
+  menuStatue: 1,
 });
 let options = [
   {
@@ -24,20 +26,22 @@ let dialogShow = ref(false);
 
 <template>
   <div class="g-box">
-    1.{{ searchForm.menuName }}
     <div class="g-search-box">
-      <y-input v-model="searchForm.menuName"></y-input>
-      <!-- <n-input
-        v-model:value="searchForm.menuName"
-        placeholder="请输入目录名"
-        clearable
-      ></n-input> -->
-      <!-- <n-select
-        v-model:value="searchForm.menuStatue"
-        placeholder="请选择目录状态"
+      <y-input v-model="searchForm.menuName" ph="请输入目录名"></y-input>
+      <y-select
+        v-model="searchForm.menuStatue"
         :options="options"
-        clearable
-      ></n-select> -->
+        ph="请选择目录状态"
+      ></y-select>
+    </div>
+    <div class="g-control-box">
+      <div class="g-control__add">
+        <y-button size="small">新增</y-button>
+      </div>
+      <div class="g-control__search">
+        <n-button>筛选</n-button>
+        <n-button>重置</n-button>
+      </div>
     </div>
   </div>
 </template>

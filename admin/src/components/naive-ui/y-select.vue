@@ -1,10 +1,14 @@
 <script setup>
-import { computed } from "vue";
-import { NInput } from "naive-ui";
+import { ref, computed, watch } from "vue";
+import { NSelect } from "naive-ui";
 
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: [String, null, Number],
+    required: true,
+  },
+  options: {
+    type: Object,
     required: true,
   },
   width: {
@@ -13,11 +17,12 @@ const props = defineProps({
   },
   ph: {
     type: String,
-    default: "请输入"
-  }
+    default: "请输入",
+  },
 });
 let emits = defineEmits(["update:modelValue"]);
 const updateValue = (value) => {
+  console.log(value);
   emits("update:modelValue", value);
 };
 
@@ -27,12 +32,13 @@ let _width = computed(() => {
 </script>
 
 <template>
-  <n-input
+  <n-select
     :value="props.modelValue"
-    @input="updateValue"
-    size="small"
-    :style="{ width: _width }"
+    @update:value="updateValue"
+    :options="options"
     :placeholder="ph"
+    :style="{ width: _width }"
+    size="small"
     clearable
-  ></n-input>
+  ></n-select>
 </template>

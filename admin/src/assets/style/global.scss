@@ -3,7 +3,7 @@
   height: 12px;
   background-color: #fff;
 }
- 
+
 ::-webkit-scrollbar-thumb {
   display: block;
   min-height: 12px;
@@ -11,7 +11,7 @@
   border-radius: 6px;
   background-color: rgb(217, 217, 217);
 }
- 
+
 ::-webkit-scrollbar-thumb:hover {
   display: block;
   min-height: 12px;
@@ -22,4 +22,8 @@
 
 .g-search-box {
   display: flex;
+  flex-wrap: wrap;
+}
+.g-search-box > div {
+  margin: 0 15px 10px 0;
 }
