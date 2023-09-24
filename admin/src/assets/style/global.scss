@@ -25,5 +25,16 @@
   flex-wrap: wrap;
 }
 .g-search-box > div {
-  margin: 0 15px 10px 0;
+  margin: 0 15px 15px 0;
+}
+.g-control-box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.g-control__add > button {
+  margin-right: 20px;
+}
+.g-control__search > button {
+  margin-left: 20px;
 }

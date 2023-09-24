@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
- 
+
 // 共用样式
 import "@/assets/style/index.scss";
 // 路由
@@ -14,7 +14,7 @@ import "virtual:svg-icons-register";
 
 // 二次封装naive-ui组件批量引入
 import initC from "./components/naive-ui";
- 
+
 const app = createApp(App);
 
 initC(app);

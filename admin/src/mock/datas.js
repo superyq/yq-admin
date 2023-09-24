@@ -78,4 +78,27 @@ export const routerData = [
       },
     ],
   },
+  {
+    name: "components",
+    path: "/components",
+    hidden: false,
+    component: null,
+    meta: {
+      title: "自定义组件",
+      icon: "user",
+    },
+    children: [
+      {
+        name: "components-quill",
+        path: "/components-quill",
+        hidden: false,
+        component: "components-quill.vue",
+        meta: {
+          title: "quill 富文本",
+          icon: "user-user",
+        },
+        children: null,
+      },
+    ],
+  },
 ];

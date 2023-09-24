@@ -11,10 +11,6 @@ const props = defineProps({
     type: [String, Number],
     default: "200",
   },
-  ph: {
-    type: String,
-    default: "请输入"
-  }
 });
 let emits = defineEmits(["update:modelValue"]);
 const updateValue = (value) => {
@@ -32,7 +28,6 @@ let _width = computed(() => {
     @input="updateValue"
     size="small"
     :style="{ width: _width }"
-    :placeholder="ph"
     clearable
   ></n-input>
 </template>

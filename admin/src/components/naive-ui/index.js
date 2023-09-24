@@ -1,14 +1,9 @@
-import path from "path";
-// import { createApp } from "vue";
+import path from "path-browserify";
 
-export default function initC(v) {
+export default function initC(app) {
   const files = import.meta.globEager("@/components/naive-ui/*.vue");
-  console.log(files);
-  console.log(files.keys());
-  // files.keys.forEach((key) => {
-  //   const name = path.basename(key, ".vue");
-  //   Vue.component(name, files(key).default || files(key));
-  //   v(name, files(key).default || files(key));
-  // });
+  Object.keys(files).forEach((key) => {
+    const name = path.basename(key, ".vue");
+    app.component(name, files[key].default || files[key]);
+  });
 }
-// files.keys()
