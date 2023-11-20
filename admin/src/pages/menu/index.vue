@@ -235,6 +235,8 @@ let pageSizeChange = (pageSize) => {
         :row-key="rowKey"
         :loading="loading"
       ></y-table>
+    </div>
+    <div class="g-page">
       <y-page :pages="pages" @pageChange="pageChange" @pageSizeChange="pageSizeChange"></y-page>
     </div>
   </div>

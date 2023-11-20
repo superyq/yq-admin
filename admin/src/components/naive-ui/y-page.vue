@@ -34,7 +34,6 @@ const pageSizeChange = (pageSize) => {
 
 <template>
   <n-pagination
-    class="page"
     v-model:page="current"
     v-model:page-size="pageSize"
     :item-count="total"
@@ -45,9 +44,3 @@ const pageSizeChange = (pageSize) => {
     @update:page-size="pageSizeChange"
   />
 </template>
-
-<style lang="scss" scoped>
-.page {
-  margin-top: 20px;
-}
-</style>
