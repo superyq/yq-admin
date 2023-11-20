@@ -1,5 +1,5 @@
 <script setup>
-import QuillEdit from "../components/QuillEdit.vue";
+import QuillEdit from "@/components/QuillEdit.vue";
 </script>
 
 <template>

@@ -6,7 +6,8 @@ import { RouterLink } from "vue-router";
 import SvgIcon from "@/components/SvgIcon.vue";
 import { routerData } from "@/mock/datas.js";
  
-const modules = import.meta.glob("../pages/*.vue");
+const modules = import.meta.glob("../pages/*/index.vue");
+console.log(1, modules);
  
 //  icon 标签
 let renderIcon = (name) => {
@@ -20,7 +21,7 @@ let getRouterItem = (item) => {
     path,
     name,
     meta,
-    component: modules[`../pages/${component}`],
+    component: modules[`../pages/${component}/index.vue`],
   };
   return obj;
 };
@@ -65,7 +66,7 @@ let getSiderMenu = (routers) => {
               ),
             title: _item.meta.title,
             key: _item.name,
-            icon: renderIcon(_item.meta.icon),
+            // icon: renderIcon(_item.meta.icon),
           });
         }
       });

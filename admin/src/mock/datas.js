@@ -3,7 +3,7 @@ export const routerData = [
     name: "home",
     path: "/home",
     hidden: false,
-    component: "home.vue",
+    component: "home",
     meta: {
       title: "首页",
       icon: "home",
@@ -21,32 +21,32 @@ export const routerData = [
     },
     children: [
       {
-        name: "system-menu",
-        path: "/system-menu",
+        name: "menu",
+        path: "/menu",
         hidden: false,
-        component: "system-menu.vue",
+        component: "menu",
         meta: {
           title: "系统菜单",
-          icon: "system-menu",
+          icon: "",
         },
         children: null,
       },
       {
-        name: "system-dict",
-        path: "/system-dict",
+        name: "dict",
+        path: "/dict",
         hidden: false,
-        component: "system-dict.vue",
+        component: "dict",
         meta: {
           title: "系统字典",
-          icon: "system-dict",
+          icon: "",
         },
         children: null,
       },
     ],
   },
   {
-    name: "user",
-    path: "/user",
+    name: "",
+    path: "",
     hidden: false,
     component: null,
     meta: {
@@ -55,24 +55,24 @@ export const routerData = [
     },
     children: [
       {
-        name: "user-user",
-        path: "/user-user",
+        name: "user",
+        path: "/user",
         hidden: false,
-        component: "user-user.vue",
+        component: "user",
         meta: {
           title: "用户管理",
-          icon: "user-user",
+          icon: "",
         },
         children: null,
       },
       {
-        name: "user-role",
-        path: "/user-role",
+        name: "role",
+        path: "/role",
         hidden: false,
-        component: "user-role.vue",
+        component: "role",
         meta: {
           title: "角色管理",
-          icon: "user-role",
+          icon: "",
         },
         children: null,
       },
@@ -89,13 +89,13 @@ export const routerData = [
     },
     children: [
       {
-        name: "components-quill",
-        path: "/components-quill",
+        name: "quill",
+        path: "/quill",
         hidden: false,
-        component: "components-quill.vue",
+        component: "quill",
         meta: {
           title: "quill 富文本",
-          icon: "user-user",
+          icon: "",
         },
         children: null,
       },

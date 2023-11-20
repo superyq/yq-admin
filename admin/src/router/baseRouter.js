@@ -6,20 +6,20 @@ export default [
   {
     path: "/login",
     name: "login",
-    component: () => import("@/pages/login.vue"),
+    component: () => import("@/pages/login/index.vue"),
   },
   {
     path: "/register",
     name: "register",
-    component: () => import("@/pages/register.vue"),
+    component: () => import("@/pages/register/index.vue"),
   },
   // 所有未知页面都是404
   {
     path: "/:catchAll(.*)",
-    component: () => import("@/pages/404.vue"),
+    component: () => import("@/pages/404/index.vue"),
   },
   {
-    component: () => import("@/pages/layout.vue"),
+    component: () => import("@/pages/layout/index.vue"),
     children: [
       {
         path: "/userinfo",
@@ -27,7 +27,7 @@ export default [
         meta: {
           title: "个人信息",
         },
-        component: () => import("@/pages/userinfo.vue"),
+        component: () => import("@/pages/userinfo/index.vue"),
       },
       {
         path: "/editpassword",
@@ -35,7 +35,7 @@ export default [
         meta: {
           title: "修改密码",
         },
-        component: () => import("@/pages/editpassword.vue"),
+        component: () => import("@/pages/editpassword/index.vue"),
       },
     ],
   },

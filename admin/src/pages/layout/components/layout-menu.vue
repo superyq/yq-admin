@@ -58,7 +58,7 @@ let handleUpdateMenu = (value, item) => {
   <!-- menu组件 -->
   <n-menu
     :inverted="inverted"
-    :indent="15"
+    :indent="40"
     :root-indent="15"
     :options="menuOptions"
     :value="activeMenuValue"

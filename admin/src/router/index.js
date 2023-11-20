@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
               let resetRouters = {
                 path: "/layout",
                 name: "layout",
-                component: () => import("@/pages/layout.vue"),
+                component: () => import("@/pages/layout/index.vue"),
                 children: _res,
               };
               router.addRoute(resetRouters);

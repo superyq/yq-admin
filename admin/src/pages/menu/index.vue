@@ -33,6 +33,7 @@ const columns = [
     title: "菜单名称",
     key: "menuName",
     align: "center",
+    width: "200"
   },
   {
     title: "图标",
@@ -63,6 +64,7 @@ const columns = [
     title: "创建时间",
     key: "createTime",
     align: "center",
+    width: '200'
   },
   {
     title: "操作",
