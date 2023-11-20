@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { NInput } from "naive-ui";
+import { uiSize } from "@/config/naive-ui";
 
 const props = defineProps({
   modelValue: {
@@ -26,7 +27,7 @@ let _width = computed(() => {
   <n-input
     :value="props.modelValue"
     @input="updateValue"
-    size="small"
+    :size="uiSize"
     :style="{ width: _width }"
     clearable
   ></n-input>

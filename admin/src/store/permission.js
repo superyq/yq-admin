@@ -7,7 +7,6 @@ import SvgIcon from "@/components/SvgIcon.vue";
 import { routerData } from "@/mock/datas.js";
  
 const modules = import.meta.glob("../pages/*/index.vue");
-console.log(1, modules);
  
 //  icon 标签
 let renderIcon = (name) => {

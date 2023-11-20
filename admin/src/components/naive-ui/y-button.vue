@@ -1,5 +1,6 @@
 <script setup>
 import { NButton } from "naive-ui";
+import { uiSize } from "@/config/naive-ui";
 
 const props = defineProps({
   icon: {
@@ -14,7 +15,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <n-button size="small" :icon-placement="right ? 'right' : 'left'">
+  <n-button :size="uiSize" :icon-placement="right ? 'right' : 'left'">
     <slot></slot>
     <template #icon v-if="icon">
       <svg-icon :name="icon" width="17"></svg-icon>

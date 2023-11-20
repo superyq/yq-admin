@@ -1,6 +1,14 @@
 <script setup>
 import { computed } from "vue";
 import { NDataTable } from "naive-ui";
+import { uiSize } from "@/config/naive-ui";
+
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
+  }
+})
 
 let height = computed(() => {
   const w_h = window.innerHeight;
@@ -18,8 +26,9 @@ let height = computed(() => {
 
 <template>
   <n-data-table
+    :loading="loading"
     :single-line="false"
-    size="small"
+    :size="uiSize"
     striped
     :max-height="height"
     :min-height="height"

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { NSelect } from "naive-ui";
+import { uiSize } from "@/config/naive-ui";
 
 const props = defineProps({
   modelValue: {
@@ -14,7 +15,6 @@ const props = defineProps({
 });
 let emits = defineEmits(["update:modelValue"]);
 const updateValue = (value) => {
-  console.log(value);
   emits("update:modelValue", value);
 };
 
@@ -28,7 +28,7 @@ let _width = computed(() => {
     :value="props.modelValue"
     @update:value="updateValue"
     :style="{ width: _width }"
-    size="small"
+    :size="uiSize"
     clearable
   ></n-select>
 </template>

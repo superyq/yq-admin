@@ -1,11 +1,17 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
+import { getTable } from "@/pages/menu/api/index.js";
 
 let searchForm = reactive({
   menuName: "",
-  menuStatue: null,
+  menuState: null,
 });
-let options = [
+let pages = reactive({
+  total: 100,
+  current: 1,
+  pageSize: 20,
+});
+let stateOptions = [
   {
     label: "启动",
     value: 1,
@@ -16,24 +22,41 @@ let options = [
   },
 ];
 let tableData = reactive([]);
-let tableLoading = ref(false);
+let loading = ref(false);
 let dialogShow = ref(false);
+
+onMounted(() => {
+  getTablehandle();
+});
+
+const getTablehandle = () => {
+  loading.value = true;
+  getTable({ ...searchForm, ...pages }).then((_data) => {
+    console.log(1, _data);
+    tableData = data;
+    loading.value = false;
+  });
+};
 
 let addHandle = () => {
   console.log("新增");
 };
 let searchHandle = () => {
-  console.log("筛选");
+  pages.current = 1;
+  getTablehandle();
 };
 let resetHandle = () => {
-  console.log("重置");
+  pages.current = 1;
+  searchForm.menuName = "";
+  searchForm.menuState = null;
+  getTablehandle();
 };
 const columns = [
   {
     title: "菜单名称",
     key: "menuName",
     align: "center",
-    width: "200"
+    width: "200",
   },
   {
     title: "图标",
@@ -44,6 +67,7 @@ const columns = [
     title: "排序",
     key: "sort",
     align: "center",
+    width: "80"
   },
   {
     title: "权限标识",
@@ -64,7 +88,7 @@ const columns = [
     title: "创建时间",
     key: "createTime",
     align: "center",
-    width: '200'
+    width: "200",
   },
   {
     title: "操作",
@@ -167,6 +191,15 @@ const data = [
 let rowKey = (row) => {
   return row.menuId;
 };
+let pageChange = (page) => {
+  pages.current = page;
+  getTablehandle();
+} 
+let pageSizeChange = (pageSize) => {
+  pages.current = 1;
+  pages.pageSize = pageSize;
+  getTablehandle();
+} 
 </script>
 
 <template>
@@ -174,12 +207,14 @@ let rowKey = (row) => {
     <div class="g-search-box">
       <y-input
         v-model="searchForm.menuName"
-        placeholder="请输入目录名"
+        placeholder="请输入菜单名"
+        @keyup.enter="searchHandle"
       ></y-input>
       <y-select
-        v-model="searchForm.menuStatue"
-        :options="options"
-        placeholder="请选择目录状态"
+        v-model="searchForm.menuState"
+        :options="stateOptions"
+        placeholder="请选择菜单状态"
+        @update:modelValue="searchHandle"
       ></y-select>
     </div>
     <div class="g-control-box">
@@ -194,7 +229,13 @@ let rowKey = (row) => {
       </div>
     </div>
     <div class="g-table">
-      <y-table :columns="columns" :data="data" :row-key="rowKey"></y-table>
+      <y-table
+        :columns="columns"
+        :data="tableData"
+        :row-key="rowKey"
+        :loading="loading"
+      ></y-table>
+      <y-page :pages="pages" @pageChange="pageChange" @pageSizeChange="pageSizeChange"></y-page>
     </div>
   </div>
 </template>
