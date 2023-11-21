@@ -5,7 +5,7 @@ import { uiSize } from "@/config/naive-ui";
 
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: [String, Number],
     required: true,
   },
   width: {

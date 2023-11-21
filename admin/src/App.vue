@@ -1,5 +1,6 @@
 <script setup>
 import MessageApi from "@/components/MessageApi.vue";
+import DialogApi from "@/components/DialogApi.vue";
 import {
   NMessageProvider,
   NDialogProvider,
@@ -18,6 +19,7 @@ import {
  
   <!-- 如果你想使用对话框，你需要把调用其方法的组件放在 n-dialog-provider 内部并且使用 useDialog 去获取 API。 -->
   <n-dialog-provider>
+    <dialog-api></dialog-api>
     <!-- 将 n-config-provider 的 locale 设为从 naive-ui 导入的 zhCN 来设定全局中文。 -->
     <!-- 将 n-config-provider 的 date-locale 设为从 naive-ui 导入的 dateZhCN 来设定全局日期中文。 -->
     <n-config-provider :locale="zhCN" :date-locale="dateZhCN">
