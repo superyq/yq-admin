@@ -1,16 +1,16 @@
 <script setup>
 import { computed } from "vue";
-import { NInput } from "naive-ui";
-import { uiSize } from "@/config/naive-ui";
+import { NInputNumber } from "naive-ui";
+import { uiSize } from "@/config/naive-ui.js";
 
 const props = defineProps({
   modelValue: {
-    type: [String, Number],
+    type: [Number, String, null],
     required: true,
   },
   icon: {
     type: String,
-    default: ''
+    default: "",
   },
   width: {
     type: [String, Number],
@@ -28,15 +28,13 @@ let _width = computed(() => {
 </script>
 
 <template>
-  <n-input
+  <n-input-number
     :value="props.modelValue"
-    @input="updateValue"
+    @update:value="updateValue"
     :size="uiSize"
     :style="{ width: _width }"
     clearable
-  >
-    <template #prefix>
-      <svg-icon v-if="icon" :name="icon"></svg-icon>
-    </template>
-  </n-input>
+  ></n-input-number>
 </template>
+
+<style lang="scss" scoped></style>

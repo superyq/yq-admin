@@ -27,7 +27,7 @@ export function tansParams(params) {
   }
   return result;
 }
- 
+
 // 日期格式化
 export function parseTime(time, pattern) {
   if (arguments.length === 0 || !time) {
@@ -72,7 +72,7 @@ export function parseTime(time, pattern) {
   });
   return time_str;
 }
- 
+
 // 添加日期范围
 export function addDateRange(params, dateRange, propName) {
   let search = params;
@@ -92,7 +92,7 @@ export function addDateRange(params, dateRange, propName) {
   }
   return search;
 }
- 
+
 /**
  * 构造树型结构数据
  * @param {*} data 数据源
@@ -106,11 +106,11 @@ export function handleTree(data, id, parentId, children) {
     parentId: parentId || "parentId",
     childrenList: children || "children",
   };
- 
+
   var childrenListMap = {};
   var nodeIds = {};
   var tree = [];
- 
+
   for (let d of data) {
     let parentId = d[config.parentId];
     if (childrenListMap[parentId] == null) {
@@ -119,14 +119,14 @@ export function handleTree(data, id, parentId, children) {
     nodeIds[d[config.id]] = d;
     childrenListMap[parentId].push(d);
   }
- 
+
   for (let d of data) {
     let parentId = d[config.parentId];
     if (nodeIds[parentId] == null) {
       tree.push(d);
     }
   }
- 
+
   function adaptToChildrenList(o) {
     if (childrenListMap[o[config.id]] !== null) {
       o[config.childrenList] = childrenListMap[o[config.id]];
@@ -137,10 +137,31 @@ export function handleTree(data, id, parentId, children) {
       }
     }
   }
- 
+
   for (let t of tree) {
     adaptToChildrenList(t);
   }
- 
+
   return tree;
+}
+
+/**
+ * 构造树型结构数据
+ * @param {*} list 数据源
+ * @param {*} rootValue 根数据 id 值
+ */
+export function toTreeData(list, rootValue) {
+  const arr = [];
+  list.forEach((item) => {
+    if (item.parentId === rootValue) {
+      // 找到之后 就要去找 item 下面有没有子节点
+      const children = toTreeData(list, item.menuId);
+      if (children.length) {
+        // 如果children的长度大于0 说明找到了子节点
+        item.children = children;
+      }
+      arr.push(item);
+    }
+  });
+  return arr;
 }

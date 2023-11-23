@@ -2,6 +2,7 @@
 import { reactive, ref, onMounted, h } from "vue";
 import { NButtonGroup } from "naive-ui";
 import { getTable, delMenu } from "@/pages/menu/api/index.js";
+import { toTreeData } from "@/utils/common.js";
 import AddOrUpdate from "@/pages/menu/components/AddOrUpdate.vue";
 import YButton from "@/components/naive-ui/y-button.vue";
 
@@ -49,6 +50,7 @@ let pageSizeChange = (pageSize) => {
 };
 
 let tableData = reactive([]);
+let parentIdOptions = reactive([]);
 let loading = ref(false);
 let rowKey = (row) => {
   return row.menuId;
@@ -103,7 +105,7 @@ const columns = [
     width: "240",
     fixed: "right",
     render(row) {
-      return h(NButtonGroup, null, () => {
+      return h(NButtonGroup, { size: "small" }, () => {
         return [
           h(
             YButton,
@@ -143,106 +145,121 @@ const columns = [
     },
   },
 ];
-const data = [
-  {
-    menuName: "系统管理",
-    icon: "system",
-    sort: 1,
-    perms: "",
-    component: "",
-    status: 1,
-    createTime: "2022-11-16 15:20:06",
-    menuType: "M",
-    menuId: 1,
-    parentId: 0,
-    children: [
-      {
-        menuName: "系统菜单",
-        icon: "tree-table",
-        sort: 1,
-        perms: "system:menu:list",
-        component: "system/menu/index",
-        status: 1,
-        createTime: "2022-11-16 15:20:06",
-        menuType: "C",
-        menuId: 102,
-        parentId: 1,
-        children: [
-          {
-            menuName: "菜单删除",
-            icon: "",
-            sort: 4,
-            perms: "system:menu:remove",
-            component: "",
-            status: 0,
-            createTime: "2022-11-16 15:20:06",
-            menuType: "F",
-            menuId: 1015,
-            parentId: 102,
-          },
-        ],
-      },
-      {
-        menuName: "系统字典",
-        icon: "education",
-        sort: 2,
-        perms: "",
-        component: "wordbook/index",
-        status: 1,
-        createTime: "2022-11-16 15:20:06",
-        menuType: "C",
-        menuId: 1093,
-        parentId: 1,
-      },
-    ],
-  },
-  {
-    menuName: "用户管理",
-    icon: "peoples",
-    sort: 5,
-    perms: "",
-    component: "",
-    status: 1,
-    createTime: "2022-11-16 15:20:06",
-    menuType: "M",
-    menuId: 1063,
-    parentId: 0,
-    children: [
-      {
-        menuName: "角色管理",
-        icon: "people",
-        sort: 5,
-        perms: "",
-        component: "user/role/index",
-        status: 1,
-        createTime: "2022-11-16 15:20:06",
-        menuType: "C",
-        menuId: 1067,
-        parentId: 1063,
-      },
-      {
-        menuName: "用户管理",
-        icon: "user",
-        sort: 1,
-        perms: "",
-        component: "user/user/index",
-        status: 1,
-        createTime: "2022-11-16 15:20:06",
-        menuType: "C",
-        menuId: 1064,
-        parentId: 1063,
-      },
-    ],
-  },
-];
+// const data = [
+//   {
+//     menuName: "系统管理",
+//     icon: "system",
+//     sort: 1,
+//     perms: "",
+//     component: "",
+//     status: 1,
+//     createTime: "2022-11-16 15:20:06",
+//     menuType: "M",
+//     menuId: 1,
+//     parentId: 0,
+//     children: [
+//       {
+//         menuName: "系统菜单",
+//         icon: "tree-table",
+//         sort: 1,
+//         perms: "system:menu:list",
+//         component: "system/menu/index",
+//         status: 1,
+//         createTime: "2022-11-16 15:20:06",
+//         menuType: "C",
+//         menuId: 102,
+//         parentId: 1,
+//         children: [
+//           {
+//             menuName: "菜单删除",
+//             icon: "",
+//             sort: 4,
+//             perms: "system:menu:remove",
+//             component: "",
+//             status: 0,
+//             createTime: "2022-11-16 15:20:06",
+//             menuType: "F",
+//             menuId: 1015,
+//             parentId: 102,
+//           },
+//         ],
+//       },
+//       {
+//         menuName: "系统字典",
+//         icon: "education",
+//         sort: 2,
+//         perms: "",
+//         component: "wordbook/index",
+//         status: 1,
+//         createTime: "2022-11-16 15:20:06",
+//         menuType: "C",
+//         menuId: 1093,
+//         parentId: 1,
+//       },
+//     ],
+//   },
+//   {
+//     menuName: "用户管理",
+//     icon: "peoples",
+//     sort: 5,
+//     perms: "",
+//     component: "",
+//     status: 1,
+//     createTime: "2022-11-16 15:20:06",
+//     menuType: "M",
+//     menuId: 1063,
+//     parentId: 0,
+//     children: [
+//       {
+//         menuName: "角色管理",
+//         icon: "people",
+//         sort: 5,
+//         perms: "",
+//         component: "user/role/index",
+//         status: 1,
+//         createTime: "2022-11-16 15:20:06",
+//         menuType: "C",
+//         menuId: 1067,
+//         parentId: 1063,
+//       },
+//       {
+//         menuName: "用户管理",
+//         icon: "user",
+//         sort: 1,
+//         perms: "",
+//         component: "user/user/index",
+//         status: 1,
+//         createTime: "2022-11-16 15:20:06",
+//         menuType: "C",
+//         menuId: 1064,
+//         parentId: 1063,
+//       },
+//     ],
+//   },
+// ];
 const getTablehandle = () => {
   loading.value = true;
-  getTable({ ...searchForm, ...pages }).then((_data) => {
-    console.log(1, _data);
-    tableData = data;
+  getTable({ ...searchForm, ...pages }).then((data) => {
+    tableData = toTreeData(data, 0);
+    parentIdOptions = [{ key: 0, label: "主类目", children: toOptions(tableData) }];
     loading.value = false;
   });
 };
+function toOptions(arr) {
+  let _arr = [];
+  arr.forEach((item) => {
+    if (item.children) {
+      _arr.push({
+        label: item.menuName,
+        key: item.menuId,
+        children: toOptions(item.children),
+      });
+    } else {
+      _arr.push({ label: item.menuName, key: item.menuId });
+    }
+  });
+  return _arr;
+}
 const editHandle = (row) => {
   menuId.value = row.menuId;
   dialogShow.value = true;
@@ -323,7 +340,7 @@ let closeHandle = () => {
         @pageSizeChange="pageSizeChange"
       ></y-page>
     </div>
-    <AddOrUpdate :show="dialogShow" :menuId="menuId" @close="closeHandle" />
+    <AddOrUpdate :show="dialogShow" :menuId="menuId" :options="parentIdOptions" @close="closeHandle" />
   </div>
 </template>
 
