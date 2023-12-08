@@ -16,6 +16,12 @@ const props = defineProps({
     type: [String, Number],
     default: "200",
   },
+  min: {
+    type: [String, Number]
+  },
+  max: {
+    type: [String, Number]
+  }
 });
 let emits = defineEmits(["update:modelValue"]);
 const updateValue = (value) => {
@@ -33,6 +39,8 @@ let _width = computed(() => {
     @update:value="updateValue"
     :size="uiSize"
     :style="{ width: _width }"
+    :min="min"
+    :max="max"
     clearable
   ></n-input-number>
 </template>

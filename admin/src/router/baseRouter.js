@@ -22,6 +22,14 @@ export default [
     component: () => import("@/pages/layout/index.vue"),
     children: [
       {
+        path: "/demo",
+        name: "demo",
+        meta: {
+          title: "demo",
+        },
+        component: () => import("@/pages/demo/index.vue"),
+      },
+      {
         path: "/userinfo",
         name: "userinfo",
         meta: {

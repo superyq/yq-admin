@@ -73,26 +73,6 @@ export function parseTime(time, pattern) {
   return time_str;
 }
 
-// 添加日期范围
-export function addDateRange(params, dateRange, propName) {
-  let search = params;
-  search.params =
-    typeof search.params === "object" &&
-    search.params !== null &&
-    !Array.isArray(search.params)
-      ? search.params
-      : {};
-  dateRange = Array.isArray(dateRange) ? dateRange : [];
-  if (typeof propName === "undefined") {
-    search.params["beginTime"] = dateRange[0];
-    search.params["endTime"] = dateRange[1];
-  } else {
-    search.params["begin" + propName] = dateRange[0];
-    search.params["end" + propName] = dateRange[1];
-  }
-  return search;
-}
-
 /**
  * 构造树型结构数据
  * @param {*} data 数据源
@@ -164,4 +144,38 @@ export function toTreeData(list, rootValue) {
     }
   });
   return arr;
+}
+
+// 深拷贝
+export function deepClone(obj) {
+  // 判断是否为对象或数组
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+
+  // 判断是否为日期类型
+  if (obj instanceof Date) {
+    return new Date(obj);
+  }
+
+  // 判断是否为正则表达式类型
+  if (obj instanceof RegExp) {
+    return new RegExp(obj);
+  }
+
+  // 判断是否为函数类型
+  if (typeof obj === "function") {
+    return new Function("return " + obj.toString())();
+  }
+
+  // 处理对象和数组类型
+  const newObj = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    // 判断是否为自身属性
+    if (obj.hasOwnProperty(key)) {
+      newObj[key] = deepClone(obj[key]);
+    }
+  }
+
+  return newObj;
 }

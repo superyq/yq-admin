@@ -1,8 +1,13 @@
 <script setup>
-import { ref, watch, reactive } from "vue";
+import { ref, watch, reactive, computed } from "vue";
 import { NForm, NFormItem, NTreeSelect } from "naive-ui";
 import { menuInfo } from "@/pages/menu/api/index.js";
-import { menuTypeOp, statusOp } from "@/pages/menu/options/index.js";
+import {
+  menuTypeOp,
+  statusOp,
+  menuInputOp,
+} from "@/pages/menu/options/index.js";
+import { deepClone } from "@/utils/common.js";
 import IconSelect from "@/pages/menu/components/IconSelect.vue";
 
 const props = defineProps({
@@ -23,6 +28,7 @@ watch(
   () => props.show,
   (newValue) => {
     dialogShow.value = newValue;
+    defaultModel = deepClone(model);
     if (newValue && props.menuId != null) {
       getDetail();
     }
@@ -44,16 +50,16 @@ let model = reactive({
   perms: "",
   status: 1,
 });
+let defaultModel = reactive({});
 const rules = {
-  menuName: [
-    {
-      required: true,
-      trigger: ["input", "blur"],
-    },
-  ],
-  sort: {
+  menuName: {
     required: true,
     trigger: ["input", "blur"],
+    message: "请输入菜单名称",
+  },
+  sort: {
+    required: true,
+    message: "请输入排序",
   },
 };
 let getDetail = () => {
@@ -65,7 +71,26 @@ let getDetail = () => {
 
 let changeParentIdHandle = (newParentId) => {
   model.parentId = newParentId;
-  console.log(1, model);
+};
+
+let modelArr = computed(() => {
+  return menuInputOp[model.menuType];
+});
+
+let formRef = ref(null);
+let handleSubmit = (e) => {
+  e.preventDefault();
+  formRef.value?.validate((errs) => {
+    console.log(1, errs);
+    if (!errs) {
+      window.$msg.success("成功");
+    } else {
+      window.$msg.error("失败");
+    }
+  });
+};
+let handleReset = () => {
+  console.log(defaultModel, model);
 };
 </script>
 
@@ -89,34 +114,55 @@ let changeParentIdHandle = (newParentId) => {
               size="small"
             />
           </n-form-item>
-          <n-form-item path="menuType" label="菜单类型"> 
+          <n-form-item path="menuType" label="菜单类型">
             <y-radio v-model="model.menuType" :options="menuTypeOp"></y-radio>
           </n-form-item>
-          <n-form-item path="icon" label="菜单图标">
-            <IconSelect v-model="model.icon"/>
+          <n-form-item
+            v-show="modelArr.includes('icon')"
+            path="icon"
+            label="菜单图标"
+          >
+            <IconSelect v-model="model.icon" />
           </n-form-item>
           <n-form-item path="menuName" label="菜单名称">
             <y-input v-model="model.menuName"></y-input>
           </n-form-item>
           <n-form-item path="sort" label="显示排序">
-            <y-input-number v-model="model.sort"></y-input-number>
+            <y-input-number v-model="model.sort" :min="1"></y-input-number>
           </n-form-item>
-          <n-form-item path="path" label="路由地址">
+          <n-form-item
+            v-show="modelArr.includes('path')"
+            path="path"
+            label="路由地址"
+          >
             <y-input v-model="model.path"></y-input>
           </n-form-item>
-          <n-form-item path="component" label="组件路径">
+          <n-form-item
+            v-show="modelArr.includes('component')"
+            path="component"
+            label="组件路径"
+          >
             <y-input v-model="model.component"></y-input>
           </n-form-item>
-          <n-form-item path="perms" label="权限字符">
+          <n-form-item
+            v-show="modelArr.includes('perms')"
+            path="perms"
+            label="权限字符"
+          >
             <y-input v-model="model.perms"></y-input>
           </n-form-item>
-          <n-form-item path="status" label="菜单状态">
+          <n-form-item
+            v-show="modelArr.includes('status')"
+            path="status"
+            label="菜单状态"
+          >
             <y-radio v-model="model.status" :options="statusOp"></y-radio>
           </n-form-item>
         </n-form>
       </div>
       <template #action>
-        <y-button type="success">提交</y-button>
+        <y-button type="success" @click="handleSubmit">提交</y-button>
+        <y-button type="info" @click="handleReset">重置</y-button>
       </template>
     </y-card>
   </y-modal>

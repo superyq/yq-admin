@@ -13,6 +13,12 @@ export const menuTypeOp = [
   },
 ];
 
+export const menuInputOp = {
+  M: ['icon','path', 'status'],
+  C: ['icon','path', 'component', 'status', 'perms'],
+  F: ['perms']
+}
+
 export const statusOp = [
   {
     label: '启用',
