@@ -1,14 +1,18 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { NPopover } from "naive-ui";
 
 const props = defineProps({
   modelValue: {
     type: String,
     required: true,
-  },
+  }
 });
 const emits = defineEmits(["update:modelValue"]);
+
+onMounted(() => {
+  iconPath.value = props.modelValue;
+})
 
 const iconsPath = import.meta.globEager("@/assets/svg/*.svg");
 const icons = Object.keys(iconsPath).map((item) =>
@@ -31,6 +35,13 @@ let showChange = () => {
 
 watch(iconPath, (newValue) => {
   emits('update:modelValue', newValue);
+})
+
+let resetPath = () => {
+  iconPath.value = "";
+}
+defineExpose({
+  resetPath
 })
 </script>
 
