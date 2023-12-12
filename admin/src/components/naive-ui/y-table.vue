@@ -32,7 +32,7 @@ let height = computed(() => {
     striped
     :max-height="height"
     :min-height="height"
-    :scroll-x="1200"
+    :scroll-x="1500"
   ></n-data-table>
 </template>
 

@@ -1,8 +1,9 @@
 <script setup>
 import { reactive, ref, onMounted, h } from "vue";
-import { NButtonGroup } from "naive-ui";
-import { getTable, delMenu } from "@/pages/menu/api/index.js";
+import { NButtonGroup, NSwitch } from "naive-ui";
+import { getTable, delMenu, changeStatus } from "@/pages/menu/api/index.js";
 import { toTreeData } from "@/utils/common.js";
+import { statusOp } from "@/pages/menu/options/index.js";
 import AddOrUpdate from "@/pages/menu/components/AddOrUpdate.vue";
 import YButton from "@/components/naive-ui/y-button.vue";
 
@@ -10,16 +11,6 @@ onMounted(() => {
   getTablehandle();
 });
 
-let stateOptions = [
-  {
-    label: "启动",
-    value: 1,
-  },
-  {
-    label: "禁用",
-    value: 0,
-  },
-];
 let searchForm = reactive({
   menuName: "",
   menuState: null,
@@ -61,6 +52,7 @@ const columns = [
     key: "menuName",
     align: "center",
     width: "200",
+    fixed: "left"
   },
   {
     title: "图标",
@@ -78,7 +70,7 @@ const columns = [
     title: "权限标识",
     key: "perms",
     align: "center",
-    width: "200",
+    minWidth: "200",
   },
   {
     title: "组件路径",
@@ -87,16 +79,29 @@ const columns = [
     width: "200",
   },
   {
-    title: "状态",
-    key: "status",
-    align: "center",
-    width: "120",
-  },
-  {
     title: "创建时间",
     key: "createTime",
     align: "center",
     width: "200",
+  },
+  {
+    title: "状态",
+    key: "status",
+    align: "center",
+    width: "120",
+    fixed: "right",
+    render(row) {
+      return h(
+        NSwitch,
+        {
+          defaultValue: row.status,
+          checkedValue: 1,
+          uncheckedValue: 0,
+          onUpdateValue: (v) => handleUpdateValue(v, row),
+        },
+        null
+      );
+    },
   },
   {
     title: "操作",
@@ -145,103 +150,19 @@ const columns = [
     },
   },
 ];
-// const data = [
-//   {
-//     menuName: "系统管理",
-//     icon: "system",
-//     sort: 1,
-//     perms: "",
-//     component: "",
-//     status: 1,
-//     createTime: "2022-11-16 15:20:06",
-//     menuType: "M",
-//     menuId: 1,
-//     parentId: 0,
-//     children: [
-//       {
-//         menuName: "系统菜单",
-//         icon: "tree-table",
-//         sort: 1,
-//         perms: "system:menu:list",
-//         component: "system/menu/index",
-//         status: 1,
-//         createTime: "2022-11-16 15:20:06",
-//         menuType: "C",
-//         menuId: 102,
-//         parentId: 1,
-//         children: [
-//           {
-//             menuName: "菜单删除",
-//             icon: "",
-//             sort: 4,
-//             perms: "system:menu:remove",
-//             component: "",
-//             status: 0,
-//             createTime: "2022-11-16 15:20:06",
-//             menuType: "F",
-//             menuId: 1015,
-//             parentId: 102,
-//           },
-//         ],
-//       },
-//       {
-//         menuName: "系统字典",
-//         icon: "education",
-//         sort: 2,
-//         perms: "",
-//         component: "wordbook/index",
-//         status: 1,
-//         createTime: "2022-11-16 15:20:06",
-//         menuType: "C",
-//         menuId: 1093,
-//         parentId: 1,
-//       },
-//     ],
-//   },
-//   {
-//     menuName: "用户管理",
-//     icon: "peoples",
-//     sort: 5,
-//     perms: "",
-//     component: "",
-//     status: 1,
-//     createTime: "2022-11-16 15:20:06",
-//     menuType: "M",
-//     menuId: 1063,
-//     parentId: 0,
-//     children: [
-//       {
-//         menuName: "角色管理",
-//         icon: "people",
-//         sort: 5,
-//         perms: "",
-//         component: "user/role/index",
-//         status: 1,
-//         createTime: "2022-11-16 15:20:06",
-//         menuType: "C",
-//         menuId: 1067,
-//         parentId: 1063,
-//       },
-//       {
-//         menuName: "用户管理",
-//         icon: "user",
-//         sort: 1,
-//         perms: "",
-//         component: "user/user/index",
-//         status: 1,
-//         createTime: "2022-11-16 15:20:06",
-//         menuType: "C",
-//         menuId: 1064,
-//         parentId: 1063,
-//       },
-//     ],
-//   },
-// ];
+let handleUpdateValue = (v, row) => {
+  changeStatus(row.menuId, v).then((data) => {
+    window.$msg.success(data);
+  });
+};
+
 const getTablehandle = () => {
   loading.value = true;
   getTable({ ...searchForm, ...pages }).then((data) => {
     tableData = toTreeData(data, 0);
-    parentIdOptions = [{ key: 0, label: "主类目", children: toOptions(tableData) }];
+    parentIdOptions = [
+      { key: 0, label: "主类目", children: toOptions(tableData) },
+    ];
     loading.value = false;
   });
 };
@@ -263,10 +184,10 @@ function toOptions(arr) {
 const editHandle = (row) => {
   menuId.value = row.menuId;
   dialogShow.value = true;
-  console.log(1, row);
 };
 const addMenuHandle = (row) => {
-  console.log(1, row);
+  parentId.value = row.menuId;
+  dialogShow.value = true;
 };
 const deleteHandle = (row) => {
   const { menuName, menuId } = row;
@@ -277,7 +198,6 @@ const deleteHandle = (row) => {
     negativeText: "不确定",
     onPositiveClick: () => {
       delMenu(menuId).then((data) => {
-        console.log(data);
         window.$msg.success("删除成功");
       });
     },
@@ -289,6 +209,7 @@ const deleteHandle = (row) => {
 
 let dialogShow = ref(false);
 let menuId = ref(null);
+let parentId = ref(0);
 let addHandle = () => {
   dialogShow.value = true;
 };
@@ -296,6 +217,7 @@ let addHandle = () => {
 let closeHandle = () => {
   dialogShow.value = false;
   menuId.value = null;
+  parentId.value = 0;
 };
 </script>
 
@@ -309,7 +231,7 @@ let closeHandle = () => {
       ></y-input>
       <y-select
         v-model="searchForm.menuState"
-        :options="stateOptions"
+        :options="statusOp"
         placeholder="请选择菜单状态"
         @update:modelValue="searchHandle"
       ></y-select>
@@ -340,7 +262,13 @@ let closeHandle = () => {
         @pageSizeChange="pageSizeChange"
       ></y-page>
     </div>
-    <AddOrUpdate :show="dialogShow" :menuId="menuId" :options="parentIdOptions" @close="closeHandle" />
+    <AddOrUpdate
+      :show="dialogShow"
+      :menuId="menuId"
+      :parentId="parentId"
+      :options="parentIdOptions"
+      @close="closeHandle"
+    />
   </div>
 </template>
 

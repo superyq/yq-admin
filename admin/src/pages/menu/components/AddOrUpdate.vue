@@ -16,6 +16,7 @@ const props = defineProps({
     default: false,
   },
   menuId: Number,
+  parentId: Number,
   options: {
     type: Array,
     required: true,
@@ -28,8 +29,12 @@ watch(
   () => props.show,
   (newValue) => {
     dialogShow.value = newValue;
+    newValue && resetForm();
     if (newValue && props.menuId != null) {
       getDetail();
+    }
+    if (newValue && props.parentId) {
+      formData.value.parentId = props.parentId;
     }
   }
 );
@@ -38,6 +43,22 @@ let closeHandle = () => {
   emits("close");
 };
 
+const rules = {
+  menuName: {
+    required: true,
+    trigger: ["input", "blur"],
+    message: "请输入菜单名称",
+  },
+  sort: {
+    required: true,
+    message: "请输入排序",
+  },
+  path: {
+    required: true,
+    trigger: ["input", "blur"],
+    message: "请输入路由地址",
+  },
+};
 let defaultFormData = {
   parentId: 0,
   menuType: "M",
@@ -50,21 +71,9 @@ let defaultFormData = {
   status: 1,
 };
 let formData = ref(deepClone(defaultFormData));
-const rules = {
-  menuName: {
-    required: true,
-    trigger: ["input", "blur"],
-    message: "请输入菜单名称",
-  },
-  sort: {
-    required: true,
-    message: "请输入排序",
-  },
-};
 let getDetail = () => {
-  console.log("详情");
   menuInfo(props.menuId).then((data) => {
-    console.log(1, data);
+    formData.value = data;
   });
 };
 
@@ -89,9 +98,9 @@ let handleSubmit = (e) => {
 };
 
 let iconRef = ref(null);
-let handleReset = () => {
+let resetForm = () => {
   formData.value = deepClone(defaultFormData);
-  iconRef.value.resetPath();
+  iconRef.value?.resetPath();
 };
 </script>
 
@@ -109,7 +118,7 @@ let handleReset = () => {
         >
           <n-form-item path="parentId" label="上级菜单">
             <n-tree-select
-              :default-value="formData.parentId"
+              :value="formData.parentId"
               :options="options"
               @update:value="changeParentIdHandle"
               size="small"
@@ -126,7 +135,7 @@ let handleReset = () => {
             path="icon"
             label="菜单图标"
           >
-            <IconSelect ref="iconRef" v-model="formData.icon"/>
+            <IconSelect ref="iconRef" v-model="formData.icon" />
           </n-form-item>
           <n-form-item path="menuName" label="菜单名称">
             <y-input v-model="formData.menuName"></y-input>
@@ -165,8 +174,10 @@ let handleReset = () => {
         </n-form>
       </div>
       <template #action>
-        <y-button class="btn-submit" type="success" @click="handleSubmit">提交</y-button>
-        <y-button type="info" @click="handleReset">重置</y-button>
+        <y-button class="btn-submit" type="success" @click="handleSubmit"
+          >提交</y-button
+        >
+        <y-button type="info" @click="resetForm">重置</y-button>
       </template>
     </y-card>
   </y-modal>
