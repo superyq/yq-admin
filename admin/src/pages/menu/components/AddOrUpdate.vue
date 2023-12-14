@@ -2,11 +2,8 @@
 import { ref, watch, computed } from "vue";
 import { NForm, NFormItem, NTreeSelect } from "naive-ui";
 import { menuInfo } from "@/pages/menu/api/index.js";
-import {
-  menuTypeOp,
-  statusOp,
-  menuInputOp,
-} from "@/pages/menu/options/index.js";
+import { statusOp } from "@/options/index.js";
+import { menuTypeOp, menuInputOp } from "@/pages/menu/options/index.js";
 import { deepClone } from "@/utils/common.js";
 import IconSelect from "@/pages/menu/components/IconSelect.vue";
 
@@ -15,7 +12,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  menuId: Number,
+  formId: Number,
   parentId: Number,
   options: {
     type: Array,
@@ -24,13 +21,13 @@ const props = defineProps({
 });
 const emits = defineEmits(["close"]);
 
-const dialogShow = ref(false);
+let dialogShow = ref(false);
 watch(
   () => props.show,
   (newValue) => {
     dialogShow.value = newValue;
     newValue && resetForm();
-    if (newValue && props.menuId != null) {
+    if (newValue && props.formId != null) {
       getDetail();
     }
     if (newValue && props.parentId) {
@@ -38,10 +35,6 @@ watch(
     }
   }
 );
-let closeHandle = () => {
-  dialogShow.value = false;
-  emits("close");
-};
 
 const rules = {
   menuName: {
@@ -71,22 +64,22 @@ let defaultFormData = {
   status: 1,
 };
 let formData = ref(deepClone(defaultFormData));
-let getDetail = () => {
-  menuInfo(props.menuId).then((data) => {
+const getDetail = () => {
+  menuInfo(props.formId).then((data) => {
     formData.value = data;
   });
 };
 
-let changeParentIdHandle = (newParentId) => {
-  formData.value.parentId = newParentId;
-};
-
+let formRef = ref(null);
+let iconRef = ref(null);
 let modelArr = computed(() => {
   return menuInputOp[formData.value.menuType];
 });
-
-let formRef = ref(null);
-let handleSubmit = (e) => {
+const resetForm = () => {
+  formData.value = deepClone(defaultFormData);
+  iconRef.value?.resetPath();
+};
+const handleSubmit = (e) => {
   e.preventDefault();
   formRef.value?.validate((errs) => {
     if (!errs) {
@@ -96,11 +89,12 @@ let handleSubmit = (e) => {
     }
   });
 };
-
-let iconRef = ref(null);
-let resetForm = () => {
-  formData.value = deepClone(defaultFormData);
-  iconRef.value?.resetPath();
+const changeParentIdHandle = (newParentId) => {
+  formData.value.parentId = newParentId;
+};
+const closeHandle = () => {
+  dialogShow.value = false;
+  emits("close");
 };
 </script>
 

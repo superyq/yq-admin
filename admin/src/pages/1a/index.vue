@@ -1,10 +1,9 @@
 <script setup>
 import { reactive, ref, onMounted, h } from "vue";
 import { NButtonGroup, NSwitch } from "naive-ui";
-import { getTable, delMenu, changeStatus } from "@/pages/menu/api/index.js";
-import { toTreeData } from "@/utils/common.js";
+import { getTable, delMenu, changeStatus } from "@/pages/1a/api/index.js";
 import { statusOp } from "@/options/index.js";
-import AddOrUpdate from "@/pages/menu/components/AddOrUpdate.vue";
+import AddOrUpdate from "@/pages/1a/components/AddOrUpdate.vue";
 import YButton from "@/components/naive-ui/y-button.vue";
 
 onMounted(() => {
@@ -13,38 +12,19 @@ onMounted(() => {
 
 let loading = ref(false);
 let tableData = reactive([]);
-let parentIdOptions = reactive([]);
 let searchForm = reactive({
-  menuName: "",
-  menuState: null,
+  demo: "",
+  status: null,
 });
 let pages = reactive({
   total: 100,
   current: 1,
   pageSize: 20,
 });
-const toOptions = (arr) => {
-  let _arr = [];
-  arr.forEach((item) => {
-    if (item.children) {
-      _arr.push({
-        label: item.menuName,
-        key: item.menuId,
-        children: toOptions(item.children),
-      });
-    } else {
-      _arr.push({ label: item.menuName, key: item.menuId });
-    }
-  });
-  return _arr;
-};
 const getTablehandle = () => {
   loading.value = true;
   getTable({ ...searchForm, ...pages }).then((data) => {
-    tableData = toTreeData(data, 0);
-    parentIdOptions = [
-      { key: 0, label: "主类目", children: toOptions(tableData) },
-    ];
+    tableData = data;
     loading.value = false;
   });
 };
@@ -54,8 +34,8 @@ const searchHandle = () => {
 };
 const resetHandle = () => {
   pages.current = 1;
-  searchForm.menuName = "";
-  searchForm.menuState = null;
+  searchForm.demo = "";
+  searchForm.status = null;
   getTablehandle();
 };
 const pageChange = (page) => {
@@ -69,57 +49,25 @@ const pageSizeChange = (pageSize) => {
 };
 
 let dialogShow = ref(false);
-let menuId = ref(null);
-let parentId = ref(0);
+let formId = ref(null);
 let addHandle = () => {
   dialogShow.value = true;
 };
 let closeHandle = () => {
   dialogShow.value = false;
-  menuId.value = null;
-  parentId.value = 0;
+  formId.value = null;
 };
 
 const rowKey = (row) => {
-  return row.menuId;
+  return row.demoId;
 };
 const columns = [
   {
-    title: "菜单名称",
-    key: "menuName",
+    title: "demo",
+    key: "demo",
     align: "left",
     width: "200",
     fixed: "left",
-  },
-  {
-    title: "图标",
-    key: "icon",
-    align: "center",
-    width: "120",
-  },
-  {
-    title: "排序",
-    key: "sort",
-    align: "center",
-    width: "80",
-  },
-  {
-    title: "权限标识",
-    key: "perms",
-    align: "center",
-    minWidth: "200",
-  },
-  {
-    title: "组件路径",
-    key: "component",
-    align: "center",
-    width: "200",
-  },
-  {
-    title: "创建时间",
-    key: "createTime",
-    align: "center",
-    width: "200",
   },
   {
     title: "状态",
@@ -163,17 +111,6 @@ const columns = [
           h(
             YButton,
             {
-              icon: "add",
-              type: "info",
-              onClick: () => addMenuHandle(row),
-            },
-            {
-              default: () => "新增",
-            }
-          ),
-          h(
-            YButton,
-            {
               icon: "delete",
               type: "error",
               onClick: () => deleteHandle(row),
@@ -188,27 +125,23 @@ const columns = [
   },
 ];
 const handleUpdateValue = (v, row) => {
-  changeStatus(row.menuId, v).then((data) => {
+  changeStatus(row.demoId, v).then((data) => {
     window.$msg.success(data);
   });
 };
 const editHandle = (row) => {
-  menuId.value = row.menuId;
-  dialogShow.value = true;
-};
-const addMenuHandle = (row) => {
-  parentId.value = row.menuId;
+  console.log(row);
   dialogShow.value = true;
 };
 const deleteHandle = (row) => {
-  const { menuName, menuId } = row;
+  const { demoName, demoId } = row;
   window.$dialog.warning({
     title: "警告",
-    content: `确定删除 '${menuName}'？`,
+    content: `确定删除 '${demoName}'？`,
     positiveText: "确定",
     negativeText: "不确定",
     onPositiveClick: () => {
-      delMenu(menuId).then((data) => {
+      delMenu(demoId).then((data) => {
         window.$msg.success("删除成功");
       });
     },
@@ -223,12 +156,12 @@ const deleteHandle = (row) => {
   <div class="g-box">
     <div class="g-search-box">
       <y-input
-        v-model="searchForm.menuName"
-        placeholder="请输入菜单名"
+        v-model="searchForm.demo"
+        placeholder="请输入"
         @keyup.enter="searchHandle"
       ></y-input>
       <y-select
-        v-model="searchForm.menuState"
+        v-model="searchForm.status"
         :options="statusOp"
         placeholder="请选择菜单状态"
         @update:modelValue="searchHandle"
@@ -262,9 +195,7 @@ const deleteHandle = (row) => {
     </div>
     <AddOrUpdate
       :show="dialogShow"
-      :formId="menuId"
-      :parentId="parentId"
-      :options="parentIdOptions"
+      :formId="formId"
       @close="closeHandle"
     />
   </div>

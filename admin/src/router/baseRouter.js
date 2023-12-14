@@ -45,6 +45,14 @@ export default [
         },
         component: () => import("@/pages/editpassword/index.vue"),
       },
+      {
+        path: "/dictenum/:id",
+        name: "dictenum",
+        meta: {
+          title: "字典数据",
+        },
+        component: () => import("@/pages/dictenum/index.vue"),
+      },
     ],
   },
 ];
