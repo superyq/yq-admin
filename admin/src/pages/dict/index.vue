@@ -83,7 +83,7 @@ const columns = [
     width: "160",
     render(row) {
       return h('div', {
-        style: 'cursor: pointer;color: red',
+        style: 'cursor: pointer;color: #337ab7',
         onClick: () => routerChange(row)
       }, {
         default: () => row.dictType
@@ -94,7 +94,6 @@ const columns = [
     title: "备注",
     key: "remark",
     align: "center",
-    minWidth: '120'
   },
   {
     title: "状态",
@@ -157,7 +156,7 @@ const handleUpdateValue = (v, row) => {
   });
 };
 const routerChange = (row) => {
-  router.push(`/dictenum/${row.id}`)
+  router.push(`/dictenum/${row.dictId}`)
 }
 const editHandle = (row) => {
   formId.value = row.dictId;
