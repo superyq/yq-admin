@@ -63,11 +63,28 @@ const rowKey = (row) => {
 };
 const columns = [
   {
-    title: "demo",
-    key: "demo",
-    align: "left",
-    width: "200",
-    fixed: "left",
+    title: "字典编码",
+    key: "dictCode",
+    width: "80",
+    align: "center",
+  },
+  {
+    title: "字典标签",
+    key: "dictLabel",
+    width: "80",
+    align: "center",
+  },
+  {
+    title: "字典键值",
+    key: "dictValue",
+    width: "80",
+    align: "center",
+  },
+  {
+    title: "字典排序",
+    key: "sort",
+    width: "80",
+    align: "center",
   },
   {
     title: "状态",
