@@ -1,8 +1,7 @@
 <script setup>
 import { reactive, ref, onMounted, h } from "vue";
 import { NButtonGroup, NSwitch } from "naive-ui";
-import { getTable, delMenu, changeStatus } from "@/pages/1a/api/index.js";
-import { statusOp } from "@/options/index.js";
+import { getTable, delMenu, changeStatus } from "@/pages/dictenum/api/index.js";
 import AddOrUpdate from "@/pages/dictenum/components/AddOrUpdate.vue";
 import YButton from "@/components/naive-ui/y-button.vue";
 
@@ -24,19 +23,10 @@ let pages = reactive({
 const getTablehandle = () => {
   loading.value = true;
   getTable({ ...searchForm, ...pages }).then((data) => {
+    console.log(1, data);
     tableData = data;
     loading.value = false;
   });
-};
-const searchHandle = () => {
-  pages.current = 1;
-  getTablehandle();
-};
-const resetHandle = () => {
-  pages.current = 1;
-  searchForm.demo = "";
-  searchForm.status = null;
-  getTablehandle();
 };
 const pageChange = (page) => {
   pages.current = page;
@@ -65,32 +55,27 @@ const columns = [
   {
     title: "字典编码",
     key: "dictCode",
-    width: "80",
     align: "center",
   },
   {
     title: "字典标签",
     key: "dictLabel",
-    width: "80",
     align: "center",
   },
   {
     title: "字典键值",
     key: "dictValue",
-    width: "80",
     align: "center",
   },
   {
     title: "字典排序",
     key: "sort",
-    width: "80",
     align: "center",
   },
   {
     title: "状态",
     key: "status",
     align: "center",
-    width: "120",
     fixed: "right",
     render(row) {
       return h(
@@ -109,7 +94,7 @@ const columns = [
     title: "操作",
     keys: "actions",
     align: "center",
-    width: "240",
+    width: "180",
     fixed: "right",
     render(row) {
       return h(NButtonGroup, { size: "small" }, () => {
@@ -149,6 +134,7 @@ const handleUpdateValue = (v, row) => {
 const editHandle = (row) => {
   console.log(row);
   dialogShow.value = true;
+  formId.value = row.dictCode;
 };
 const deleteHandle = (row) => {
   const { demoName, demoId } = row;
@@ -171,28 +157,9 @@ const deleteHandle = (row) => {
 
 <template>
   <div class="g-box">
-    <div class="g-search-box">
-      <y-input
-        v-model="searchForm.demo"
-        placeholder="请输入"
-        @keyup.enter="searchHandle"
-      ></y-input>
-      <y-select
-        v-model="searchForm.status"
-        :options="statusOp"
-        placeholder="请选择菜单状态"
-        @update:modelValue="searchHandle"
-      ></y-select>
-    </div>
     <div class="g-control-box">
       <div class="g-control__add">
         <y-button @click="addHandle" icon="add" type="info">新增</y-button>
-      </div>
-      <div class="g-control__search">
-        <y-button @click="searchHandle" icon="search" type="info"
-          >筛选</y-button
-        >
-        <y-button @click="resetHandle" icon="reset">重置</y-button>
       </div>
     </div>
     <div class="g-table">
@@ -210,11 +177,7 @@ const deleteHandle = (row) => {
         @pageSizeChange="pageSizeChange"
       ></y-page>
     </div>
-    <AddOrUpdate
-      :show="dialogShow"
-      :formId="formId"
-      @close="closeHandle"
-    />
+    <AddOrUpdate :show="dialogShow" :formId="formId" @close="closeHandle" />
   </div>
 </template>
 

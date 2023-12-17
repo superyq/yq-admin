@@ -19,6 +19,6 @@ export const detailData = {
   dictCode: 1,
   dictLabel: "字典1",
   dictValue: "zd1",
-  sort: 1,
-  status: 1,
+  sort: 3,
+  status: 0,
 };

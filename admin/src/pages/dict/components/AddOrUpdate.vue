@@ -25,7 +25,16 @@ watch(
     }
   }
 );
+
 let formRef = ref(null);
+let defaultFormData = {
+  dictId: 0,
+  dictName: "",
+  dictType: "",
+  remark: "",
+  status: 1,
+};
+let formData = ref(deepClone(defaultFormData));
 const rules = {
   dictName: {
     required: true,
@@ -37,14 +46,6 @@ const rules = {
     message: "请输入字典类型",
   },
 };
-let defaultFormData = {
-  dictId: 0,
-  dictName: "",
-  dictType: "",
-  remark: "",
-  status: 1,
-};
-let formData = ref(deepClone(defaultFormData));
 const getDetail = () => {
   dictInfo(props.formId).then((data) => {
     formData.value = data;
@@ -67,7 +68,6 @@ const handleSubmit = (e) => {
     }
   });
 };
-
 </script>
 
 <template>

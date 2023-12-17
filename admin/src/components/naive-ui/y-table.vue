@@ -6,9 +6,9 @@ import { uiSize } from "@/config/naive-ui";
 const props = defineProps({
   loading: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
 let height = computed(() => {
   const w_h = window.innerHeight;
@@ -22,6 +22,9 @@ let height = computed(() => {
     return 600;
   }
 });
+let scrollX = computed(() => {
+  return window.innerWidth - 195;
+});
 </script>
 
 <template>
@@ -32,7 +35,7 @@ let height = computed(() => {
     striped
     :max-height="height"
     :min-height="height"
-    :scroll-x="1500"
+    :scroll-x="scrollX"
   ></n-data-table>
 </template>
 

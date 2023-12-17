@@ -26,18 +26,18 @@ watch(
   }
 );
 
+let defaultFormData = {
+  demo: 0,
+  status: 0,
+};
+let formData = ref(deepClone(defaultFormData));
 const rules = {
   demo: {
     required: true,
     trigger: ["input", "blur"],
     message: "请输入菜单名称",
-  }
+  },
 };
-let defaultFormData = {
-  demo: 0,
-  status: 0
-};
-let formData = ref(deepClone(defaultFormData));
 const getDetail = () => {
   demoInfo(props.formId).then((data) => {
     formData.value = data;
@@ -79,10 +79,7 @@ const closeHandle = () => {
           <n-form-item path="demo" label="demo">
             <y-input v-model="formData.demo"></y-input>
           </n-form-item>
-          <n-form-item
-            path="status"
-            label="状态"
-          >
+          <n-form-item path="status" label="状态">
             <y-radio v-model="formData.status" :options="statusOp"></y-radio>
           </n-form-item>
         </n-form>

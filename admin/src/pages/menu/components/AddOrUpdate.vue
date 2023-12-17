@@ -36,6 +36,18 @@ watch(
   }
 );
 
+let defaultFormData = {
+  parentId: 0,
+  menuType: "M",
+  icon: "",
+  menuName: "",
+  sort: 1,
+  path: "",
+  component: "",
+  perms: "",
+  status: 1,
+};
+let formData = ref(deepClone(defaultFormData));
 const rules = {
   menuName: {
     required: true,
@@ -52,18 +64,6 @@ const rules = {
     message: "请输入路由地址",
   },
 };
-let defaultFormData = {
-  parentId: 0,
-  menuType: "M",
-  icon: "",
-  menuName: "",
-  sort: 1,
-  path: "",
-  component: "",
-  perms: "",
-  status: 1,
-};
-let formData = ref(deepClone(defaultFormData));
 const getDetail = () => {
   menuInfo(props.formId).then((data) => {
     formData.value = data;

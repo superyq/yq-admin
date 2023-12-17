@@ -1,5 +1,5 @@
 import api from "@/api/http.js";
-import { tableData, detailData } from "@/pages/1a/mock/index.js";
+import { tableData, detailData } from "@/pages/dictenum/mock/index.js";
 
 // 列表数据
 export function getTable(params) {
