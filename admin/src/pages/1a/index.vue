@@ -65,9 +65,8 @@ const columns = [
   {
     title: "demo",
     key: "demo",
-    align: "left",
+    align: "center",
     width: "200",
-    fixed: "left",
   },
   {
     title: "状态",
@@ -130,7 +129,7 @@ const handleUpdateValue = (v, row) => {
   });
 };
 const editHandle = (row) => {
-  console.log(row);
+  formId.value = row.id;
   dialogShow.value = true;
 };
 const deleteHandle = (row) => {
@@ -193,11 +192,7 @@ const deleteHandle = (row) => {
         @pageSizeChange="pageSizeChange"
       ></y-page>
     </div>
-    <AddOrUpdate
-      :show="dialogShow"
-      :formId="formId"
-      @close="closeHandle"
-    />
+    <AddOrUpdate :show="dialogShow" :formId="formId" @close="closeHandle" />
   </div>
 </template>
 
